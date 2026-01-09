@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+
+# Environments
+.venv/
+venv/
+ENV/
+env/
+
+# Packaging / build
+build/
+dist/
+*.egg-info/
+
+# Editors / OS
+.DS_Store
+.idea/
+.vscode/
+
+# Streamlit
+.streamlit/
+
+# Data outputs
+runs/raw/*.jsonl
+runs/scored/*.jsonl
+reports/figures/*
+trust_probe/data/ratings.csv
+
+# Secrets
+.env
+.env.example
+

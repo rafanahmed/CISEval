@@ -1,10 +1,18 @@
 # CISEval
 
-CISEval is a lightweight **incentive-switching evaluation harness** for spotting *trust-signal distortion* in model outputs—primarily **confidence** and **disclosure**—while trying to keep **task correctness roughly constant** by holding prompts (and “truth targets”) fixed.
+CISEval is a small, lightweight evaluation setup for poking at how models change their trust-related signals—mainly things like confidence and disclosure—when you tweak incentives.
 
-The idea: run the same set of prompts under different **incentive regimes** (different system prompts), then score outputs for confidence/disclosure signals, run simple diagnostics, and optionally collect a small **trust probe** (A/B rater UI) to see which regime’s answers people trust more.
+The rough idea is to keep the task itself mostly the same, but change the incentive framing (usually via different system prompts), then see how the model’s tone and self-presentation shift. We try to hold prompts (and rough “truth targets”) fixed so that changes in confidence/disclosure aren’t just because the model is answering a different question.
 
-## Quickstart (Python 3.11)
+At a high level:
+
+* Run the *same prompts* under different incentive regimes
+* Look at how confidence and disclosure signals change
+* Optionally sanity-check this with a tiny human trust probe (A/B style) to see which answers people *feel* more inclined to trust
+
+This is exploratory and intentionally a bit scrappy.
+
+## Quickstart (Python 3.11-ish)
 
 ```bash
 pip install -r requirements.txt
@@ -17,18 +25,40 @@ streamlit run demo/streamlit_app.py
 streamlit run trust_probe/app.py
 ```
 
-## What you get
+Nothing fancy here—just run things in order.
 
-- **Generation**: `scripts/run_generation.py` runs `prompt × regime` and writes JSONL to `runs/raw/`.
-- **Scoring**: `scripts/run_scoring.py` computes confidence/disclosure + diagnostics into `runs/scored/`.
-- **Reporting**: `scripts/run_report.py` writes `reports/summary.md` and a couple simple plots.
-- **Demo viewer**: `demo/streamlit_app.py` shows outputs across regimes for a chosen prompt.
-- **Trust probe**: `trust_probe/app.py` is a tiny rater UI that appends to `trust_probe/data/ratings.csv`.
+## What’s in the box
 
-## Limitations (by design)
+* **Generation**
+  `scripts/run_generation.py` runs all `prompt × incentive regime` combinations and dumps raw model outputs to `runs/raw/` (JSONL).
 
-- **Truth-fixed is approximate**: “correctness held constant” is not guaranteed; prompts have only a lightweight `truth_target`.
-- **Heuristic scoring**: confidence/disclosure are scored via pattern matching, not a trained rater.
-- **Prompt-level incentives**: incentives are implemented as system prompts; models may not follow them reliably.
-- **Small rater probe**: the trust UI is intentionally minimal and noisy; it’s a quick signal, not a study.
+* **Scoring**
+  `scripts/run_scoring.py` adds simple confidence / disclosure scores plus a few diagnostics, written to `runs/scored/`.
+
+* **Reporting**
+  `scripts/run_report.py` produces a rough markdown summary (`reports/summary.md`) and a couple basic plots.
+
+* **Demo viewer**
+  `demo/streamlit_app.py` lets you flip through the same prompt answered under different regimes.
+
+* **Trust probe**
+  `trust_probe/app.py` is a very small A/B rater UI. It just appends votes to `trust_probe/data/ratings.csv`. This is meant as a quick gut-check, not a real study.
+
+## Known limitations / caveats
+
+These are mostly intentional:
+
+* **“Truth held constant” is fuzzy**
+  Correctness isn’t actually guaranteed. Prompts only have a lightweight `truth_target`, so answers can still drift.
+
+* **Scoring is heuristic**
+  Confidence and disclosure are detected with pattern matching and rules, not a trained or calibrated rater.
+
+* **Incentives are prompt-level only**
+  Incentives are implemented via system prompts, and models don’t always follow those cleanly or consistently.
+
+* **The trust probe is noisy**
+  The rater UI is minimal on purpose. Results are directional at best—useful for exploration, not conclusions.
+
+
 

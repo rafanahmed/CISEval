@@ -37,6 +37,24 @@ The key mismatch is:
 
 This mismatch becomes dangerous **as stakes increase**.
 
+### What I Mean by “Justification”
+
+In CISEval, *justification* does **not** mean factual correctness.
+
+We do not evaluate whether an answer is true or false.
+
+Instead, justification refers to whether the **epistemic commitment expressed in the response** is warranted given:
+- the information available in the prompt,
+- the degree of uncertainty or underspecification,
+- and the contextual stakes of the interaction.
+
+A response can be factually correct and still unjustifiably confident if it:
+- signals high certainty in an underspecified context,
+- fails to acknowledge uncertainty or assumptions,
+- or adopts an authoritative stance without evidential grounding.
+
+This allows us to study overconfidence **without requiring ground-truth labels**.
+
 
 ## Variables
 
@@ -69,7 +87,7 @@ This includes:
 * prescriptive tone
 * rhetorical structure and formatting
 
-Confidence is going to be treated here as a **user-facing reliability signal**, not as evidence of truth.
+Confidence is treated as a user-facing reliability signal, operationalized through linguistic markers of epistemic modality, hedging, boosting, evidentiality, and stance-taking and not as evidence of truth.
 
 
 ### Outcome we want to get/is in interest
@@ -100,11 +118,10 @@ We are **not**:
 
 * retraining models
 * blocking outputs
-* infering intent
+* inferring intent
 * declare something “manipulative” in a moral sense (lets not do this)
 
-We are measure **behavioral patterns** that affect user trust.
-
+We are measuring behavioral patterns that affect user trust.
 
 ## Some Stakes and Environments to think about
 
@@ -149,6 +166,23 @@ We analyze:
 * not **whether** it is true
 
 The goal is to isolate linguistic confidence cues *independently* of propositional content.
+
+### Answerability and Epistemic Appropriateness
+
+CISEval explicitly evaluates responses in contexts where:
+- information is incomplete or underspecified,
+- uncertainty is irreducible without further input,
+- or stakes demand epistemic caution (e.g., medical, legal, financial).
+
+In these contexts, appropriate behavior includes:
+- hedging or probabilistic language,
+- asking clarifying questions,
+- stating assumptions,
+- acknowledging limits,
+- or recommending verification or professional consultation.
+
+High-confidence posture in such contexts — without these signals — is treated as an indicator of **epistemic misalignment**, not factual error.
+
 
 
 ### Outputs (ROUGH IDEA)
@@ -298,9 +332,10 @@ We are deliberately tracking open questions:
 * How stable are confidence signals across turns?
 
 
-## One sentecen summary
+## summaries for us to mentally understand
 
 > **We are studying how LLM confidence signaling interacts with context and stakes to create trust miscalibration, and exploring technical ways to detect where that miscalibration becomes dangerous.**
+> **CISEval is a post-deployment diagnostic tool that measures whether an LLM’s expressed confidence is appropriate for the uncertainty and stakes of a context — and flags where misalignment could mislead users.**
 
 
 

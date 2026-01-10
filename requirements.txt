@@ -5,3 +5,7 @@ tqdm
 streamlit
 python-dotenv
 matplotlib
+openai
+datasets
+transformers
+torch
